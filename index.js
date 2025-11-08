@@ -10,7 +10,8 @@ app.use(express.json())
 
 const admin = require("firebase-admin");
 
-const serviceAccount = require("./smart-deals-25-firebase-adminsdk.json");
+const decoded = Buffer.from(process.env.FIREBASE_SERVICE_KEY, "base64").toString("utf8");
+const serviceAccount = JSON.parse(decoded);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
@@ -125,7 +126,6 @@ async function run() {
     })
 
 
-
     //bids get api
 
     // app.get('/bids',  VariryWithCustomtoken, async (req, res) => {
@@ -142,6 +142,8 @@ async function run() {
     //   console.log(allValues)
     //   res.send(allValues)
     // })
+
+
     app.get('/bids', VariryWithfirebase, async (req, res) => {
       const email = req.query.email
       const query = {}
@@ -248,8 +250,8 @@ async function run() {
       res.send(result)
 
     })
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    // await client.db("admin").command({ ping: 1 });
+    // console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
 
   }
